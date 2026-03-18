@@ -3,6 +3,7 @@ using System;
 using CrudMvc.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrudMvc.Migrations
 {
     [DbContext(typeof(CrudMvcContext))]
-    partial class CrudMvcContextModelSnapshot : ModelSnapshot
+    [Migration("20260318225120_DepartamentForeignKey")]
+    partial class DepartamentForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

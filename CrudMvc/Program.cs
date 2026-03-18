@@ -13,6 +13,7 @@ builder.Services.AddDbContext<CrudMvcContext>(options =>
 
 builder.Services.AddScoped<SeedingService>();
 builder.Services.AddScoped<SellerService>();
+builder.Services.AddScoped<DepartamentService>();
 
 var app = builder.Build();
 
