@@ -34,3 +34,9 @@ main{flex :1;}
 footer{
     margin:30px;
 }
+.table a {
+    color: white;
+}
+ .table a:hover {
+    color: #ccc;
+ }

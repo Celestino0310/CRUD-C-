@@ -5,6 +5,7 @@ using CrudMvc.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
+using System.Diagnostics;
 using ZstdSharp.Unsafe;
 
 namespace CrudMvc.Controllers
@@ -39,15 +40,15 @@ namespace CrudMvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "ID NOT FOUND" });
             }
 
             var seller =  _sellerService.findByID(id.Value);
             if (seller == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "SELLER NOT FOUND" }); ;
             }
-            return View(seller);
+            return View();
         }
 
         [HttpPost]
@@ -56,7 +57,7 @@ namespace CrudMvc.Controllers
         {
             if (id != seller.Id)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "ID NOT FOUND" });
             }
 
             if (ModelState.IsValid)
@@ -68,28 +69,28 @@ namespace CrudMvc.Controllers
                 }
                 catch (DbUpdateConcurrencyException e)
                 {
-                    throw new DbException("erro com o banco de dados");
+                    return RedirectToAction(nameof(Error), new { message = e.Message });
                 }
                 catch (NotFoundException e)
                 {
-                    throw new NotFoundException("ID NÃO ENCONTRADO");
+                    return RedirectToAction(nameof(Error), new { message = e.Message });
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View();
+            return View(seller);
         }
         //============================DETAILS =======================================
         public IActionResult Details (int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new {message="ID NOT EXIST"});
 
             }
             var obj = _sellerService.findByID(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "ID NOT FOUND" });
 
             }
 
@@ -100,13 +101,13 @@ namespace CrudMvc.Controllers
         public IActionResult Delete(int id) {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "ID NOT FOUND" });
 
             }
             var obj = _sellerService.findByID(id);
             if (obj==null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Seller NOT FOUND" });
 
             }
             
@@ -126,8 +127,22 @@ namespace CrudMvc.Controllers
         [HttpPost]//serve para informar que essa função vai coloca algo no db
         [ValidateAntiForgeryToken]//protege essa requisição de alguns ataques
         public IActionResult Create(Seller seller) {
-            _sellerService.Insert(seller);
-            return RedirectToAction(nameof(Index)); 
+
+            if (!ModelState.IsValid)
+            { return View(); }
+
+              _sellerService.Insert(seller);
+              return RedirectToAction(nameof(Index)); 
+        }
+        public IActionResult Error(string message)
+        {
+            var erro = new ErrorViewModel
+            {
+                Mensagem = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+
+         
+            };return View(erro);
         }
     }
 }

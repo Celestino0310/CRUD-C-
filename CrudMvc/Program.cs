@@ -1,7 +1,10 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using CrudMvc.Data;
 using CrudMvc.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
+using Org.BouncyCastle.Tsp;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,5 +42,19 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+
+//adicionando variação de cultura- GLOBAL = USA
+var USA = new System.Globalization.CultureInfo("en-Us");
+var Locale = new RequestLocalizationOptions()
+{
+    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(USA),
+    SupportedCultures = new List<System.Globalization.CultureInfo> { USA },
+    SupportedUICultures = new List<System.Globalization.CultureInfo> { USA },
+   
+
+};
+app.UseRequestLocalization(Locale);
+
 
 app.Run();
