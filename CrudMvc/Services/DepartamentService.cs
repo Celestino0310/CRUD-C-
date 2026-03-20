@@ -1,5 +1,6 @@
 ﻿using CrudMvc.Data;
 using CrudMvc.Models;
+using Microsoft.EntityFrameworkCore;
 
 
 
@@ -15,9 +16,9 @@ namespace CrudMvc.Services
 
             _context = context;
         }
-        public List<Departament> findAll()
+        public async Task<List<Departament>> findAllAsync()
         {
-            return _context.Departament.OrderBy(x => x.Name).ToList();
+            return await _context.Departament.OrderBy(x => x.Name).ToListAsync();
         }
        
     }

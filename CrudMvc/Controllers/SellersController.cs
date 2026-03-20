@@ -23,15 +23,15 @@ namespace CrudMvc.Controllers
         }
         
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var list = _sellerService.findAll();
+            var list = await _sellerService.findAllAsync();
             return View(list);
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {   
-            var departaments= _departamentService.findAll();
-            var viewModel = new SellerFormViewModel { Departaments=departaments};
+            var departaments= await _departamentService.findAllAsync();
+            var viewModel = new SellerFormViewModel { Departaments = departaments };
             return View(viewModel);
         }
         
@@ -43,7 +43,7 @@ namespace CrudMvc.Controllers
                 return RedirectToAction(nameof(Error), new { message = "ID NOT FOUND" });
             }
 
-            var seller =  _sellerService.findByID(id.Value);
+            var seller = await _sellerService.findByIDAsync(id.Value);
             if (seller == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "SELLER NOT FOUND" }); ;
@@ -64,7 +64,7 @@ namespace CrudMvc.Controllers
             {
                 try
                 {
-                    _sellerService.Update(seller);
+                   await _sellerService.UpdateAsync(seller);
                     
                 }
                 catch (DbUpdateConcurrencyException e)
@@ -87,7 +87,7 @@ namespace CrudMvc.Controllers
                 return RedirectToAction(nameof(Error), new {message="ID NOT EXIST"});
 
             }
-            var obj = _sellerService.findByID(id.Value);
+            var obj = _sellerService.findByIDAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "ID NOT FOUND" });
@@ -98,13 +98,13 @@ namespace CrudMvc.Controllers
         }
 
 
-        public IActionResult Delete(int id) {
+        public async Task<IActionResult> Delete(int id) {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "ID NOT FOUND" });
 
             }
-            var obj = _sellerService.findByID(id);
+            var obj = await _sellerService.findByIDAsync(id);
             if (obj==null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Seller NOT FOUND" });
@@ -117,8 +117,8 @@ namespace CrudMvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]//protege essa requisição de alguns ataques
-        public IActionResult Delete(Seller seller) {
-            _sellerService.Remove(seller.Id);
+        public async Task<IActionResult> Delete(Seller seller) {
+            await _sellerService.Remove(seller.Id);
             return RedirectToAction(nameof(Index)); 
         }
 
@@ -126,12 +126,12 @@ namespace CrudMvc.Controllers
 
         [HttpPost]//serve para informar que essa função vai coloca algo no db
         [ValidateAntiForgeryToken]//protege essa requisição de alguns ataques
-        public IActionResult Create(Seller seller) {
+        public async Task<IActionResult> Create(Seller seller) {
 
             if (!ModelState.IsValid)
             { return View(); }
 
-              _sellerService.Insert(seller);
+              await _sellerService.InsertAsync(seller);
               return RedirectToAction(nameof(Index)); 
         }
         public IActionResult Error(string message)

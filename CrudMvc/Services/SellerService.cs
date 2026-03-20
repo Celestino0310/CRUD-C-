@@ -14,38 +14,39 @@ namespace CrudMvc.Services
 
             _context = context;
         }
-        public List<Seller> findAll()
+        public async Task<List<Seller>> findAllAsync()
         {
-            return _context.Seller.ToList();
+            return await _context.Seller.ToListAsync();
         }
-        public Seller findByID(int id) {
-            return _context.Seller.Include(b=>b.Departament).FirstOrDefault(X => X.Id == id);
+
+        public async Task<Seller> findByIDAsync(int id) {
+            return await _context.Seller.Include(b=>b.Departament).FirstOrDefaultAsync(X => X.Id == id);
           }
 
-        public void Remove(int Id){//REMOVE OBJETO VENDEDOR
+        public async Task Remove(int Id){//REMOVE OBJETO VENDEDOR de forma assyncrona agr
             var obj=_context.Seller.Find(Id);
             _context.Remove(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
         }
 
-        public void Insert(Seller obj)
+        public async Task InsertAsync(Seller obj)
         {
             _context.Add(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
         }
         
-        public void Update(Seller obj)
-        {
-            if (!_context.Seller.Any(x => x.Id == obj.Id))
+        public async Task UpdateAsync(Seller obj)
+        { bool hasAny = await _context.Seller.AnyAsync(x => x.Id == obj.Id);
+            if (!hasAny)
             {
                 throw new NotFoundException("id not found | ID não encontrado");
             }
             try
             {
                 _context.Update(obj);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch(DbException e) { throw new DbException(e.Message); }
            
