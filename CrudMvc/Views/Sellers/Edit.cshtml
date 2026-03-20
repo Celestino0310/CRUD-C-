@@ -1,33 +1,68 @@
-﻿@model CrudMvc.Models.Departament
+﻿@model CrudMvc.Models.ViewModels.SellerFormViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Vendedor";
 }
 
-<h1>Edit</h1>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
 
-<h4>Departament</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0 fw-semibold">Editar Vendedor</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit">
+
+                        <input type="hidden" asp-for="Seller.Id" />
+
+                        <div class="mb-3">
+                            <label asp-for="Seller.Name" class="form-label fw-semibold"></label>
+                            <input asp-for="Seller.Name" class="form-control" placeholder="Nome completo" />
+                            <span asp-validation-for="Seller.Name" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Seller.Email" class="form-label fw-semibold"></label>
+                            <input asp-for="Seller.Email" class="form-control" placeholder="email@exemplo.com" />
+                            <span asp-validation-for="Seller.Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Seller.BaseSalary" class="form-label fw-semibold"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input asp-for="Seller.BaseSalary" class="form-control" placeholder="0,00" />
+                            </div>
+                            <span asp-validation-for="Seller.BaseSalary" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Seller.BirthDate" class="form-label fw-semibold"></label>
+                            <input asp-for="Seller.BirthDate" class="form-control" />
+                            <span asp-validation-for="Seller.BirthDate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Seller.DepartamentId" class="form-label fw-semibold"></label>
+                            <select asp-for="Seller.DepartamentId" asp-items="@(new SelectList(Model.Departaments, "Id", "Name"))" class="form-select"></select>
+                            <span asp-validation-for="Seller.DepartamentId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a asp-action="Index" class="btn btn-outline-secondary">← Voltar</a>
+                            <button type="submit" class="btn btn-dark px-4">Salvar</button>
+                        </div>
+
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

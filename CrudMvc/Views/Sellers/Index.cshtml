@@ -22,6 +22,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.BaseSalary)
                 </th>
+                
                 <th class="text-end">Ações</th>
             </tr>
             
@@ -46,6 +47,7 @@
                         @Html.DisplayFor(Item => modelo.BaseSalary)
 
                     </td>
+                    
                     <td class="text-end">
                         <a asp-action="Edit" asp-route-id="@modelo.Id" class="btn btn-sm btn-outline-warning">Editar</a>
                         <a asp-action="Details" asp-route-id="@modelo.Id" class="btn btn-sm btn-outline-info">Detalhes</a>

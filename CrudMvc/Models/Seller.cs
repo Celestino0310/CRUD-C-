@@ -8,7 +8,9 @@
         public DateTime BirthDate { get; set; }
 
         public double BaseSalary { get; set; }
+
         public int DepartamentId { get; set; }
+        public Departament? Departament { get; set; }//aparentemente é necessário pro eager loading
         public ICollection<SalesRecord>Sales { get; set; }=new List<SalesRecord>();
 
         public Seller()
