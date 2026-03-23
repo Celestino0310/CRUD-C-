@@ -23,11 +23,16 @@ namespace CrudMvc.Services
             return await _context.Seller.Include(b=>b.Departament).FirstOrDefaultAsync(X => X.Id == id);
           }
 
-        public async Task Remove(int Id){//REMOVE OBJETO VENDEDOR de forma assyncrona agr
-            var obj=_context.Seller.Find(Id);
-            _context.Remove(obj);
-            await _context.SaveChangesAsync();
-
+        public async Task RemoveAsync(int Id){//REMOVE OBJETO VENDEDOR de forma assyncrona agr
+            try
+            {
+                var obj = _context.Seller.Find(Id);
+                _context.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) {
+                throw new IntegrityException(ex.Message);
+            }
         }
 
         public async Task InsertAsync(Seller obj)

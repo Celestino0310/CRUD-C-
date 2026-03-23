@@ -118,9 +118,16 @@ namespace CrudMvc.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]//protege essa requisição de alguns ataques
         public async Task<IActionResult> Delete(Seller seller) {
-            await _sellerService.Remove(seller.Id);
-            return RedirectToAction(nameof(Index)); 
-        }
+            try
+            {
+                await _sellerService.RemoveAsync(seller.Id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
+            }
 
         //POST CREATE 
 
